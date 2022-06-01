@@ -2,7 +2,7 @@
 /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 declare(strict_types=1);
 
-namespace Ruga\Skeleton\Test\PHPUnit;
+namespace Ruga\Money\Test\PHPUnit;
 
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\ConfigAggregator\ConfigAggregator;

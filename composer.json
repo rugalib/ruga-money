@@ -6,6 +6,7 @@
   "type": "library",
   "require": {
     "php": "^7.4",
+    "ext-intl": "*",
     "ext-bcmath": "*",
     "rugalib/ruga-i18n": "^1.0",
     "rugalib/ruga-std": "^1.0"
