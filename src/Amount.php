@@ -65,7 +65,7 @@ class Amount
      * @param string|null      $currency
      * @param array|null       $options
      */
-    public function __construct($amount, string $currency = null, array $options = null)
+    public function __construct($amount, string $currency = null, array $options = [])
     {
         if ($amount instanceof Amount) {
             $currency = $amount->getCurrency();
@@ -73,17 +73,8 @@ class Amount
             $amount = $amount->getAmountRaw();
         }
         
-        if ($options !== null) {
-            if (isset($options['scale'])) {
-                $this->scale = $options['scale'];
-            }
-            if (isset($options['showSymbol'])) {
-                $this->showSymbol = $options['showSymbol'];
-            }
-            if (isset($options['locale'])) {
-                $this->locale = $options['locale'];
-            }
-        }
+        $this->setOptions($options);
+        
         if ($currency !== null) {
             $iso3166 = new \Ruga\I18n\Iso3166(
                 (new \Ruga\I18n\Iso3166\Filter\All())
@@ -134,17 +125,41 @@ class Amount
     
     
     /**
-     * Compare $amount to the stored amount and return the result.
-     * -1: $amount is larger
-     *  0: Equal
-     *  1: this amount is larger
+     * Set options as array.
      *
-     * @param self $amount
+     * @param array $options
+     *
+     * @return void
+     */
+    private function setOptions(array $options): void
+    {
+        if (isset($options['scale'])) {
+            $this->scale = $options['scale'];
+        }
+        if (isset($options['showSymbol'])) {
+            $this->showSymbol = $options['showSymbol'];
+        }
+        if (isset($options['locale'])) {
+            $this->locale = $options['locale'];
+        }
+    }
+    
+    
+    
+    /**
+     * Compare $amount to the stored amount and return the result.
+     * -1: $amount is larger ($this < $amount)
+     *  0: Equal ($this == $amount)
+     *  1: this amount is larger ($this > $amount)
+     *
+     * @param self|int|float|string $amount
      *
      * @return int
+     * @throws \Exception
      */
-    public function comp(self $amount): int
+    public function comp($amount): int
     {
+        $amount = new Amount($amount);
         $this->checkOperand($amount, 'comp');
         return bccomp($this->getAmountRaw(), $amount->getAmountRaw(), $this->scale);
     }
@@ -171,13 +186,14 @@ class Amount
     /**
      * Subtract $amount from the stored amount and return a new Amount object.
      *
-     * @param self $amount
+     * @param self|int|float|string $amount
      *
      * @return self
      * @throws \Exception
      */
-    public function sub(self $amount): self
+    public function sub($amount): self
     {
+        $amount = new Amount($amount);
         $this->checkOperand($amount, 'sub');
         return $this->clone(bcsub($this->getAmountRaw(), $amount->getAmountRaw(), $this->scale));
     }
@@ -187,12 +203,13 @@ class Amount
     /**
      * Multiply the stored amount with $amount and return a new Amount object.
      *
-     * @param string $right_operand
+     * @param string|int|float $right_operand
      *
      * @return self
      */
-    public function mul(string $right_operand): self
+    public function mul($right_operand): self
     {
+        $right_operand = (string)$right_operand;
         return $this->clone(bcmul($this->getAmountRaw(), $right_operand, $this->scale));
     }
     
@@ -201,12 +218,13 @@ class Amount
     /**
      * Divide the stored amount by $amount and return a new Amount object.
      *
-     * @param string $divisor
+     * @param string|int|float $right_operand
      *
      * @return self
      */
-    public function div(string $divisor): self
+    public function div($divisor): self
     {
+        $divisor = (string)$divisor;
         return $this->clone(bcdiv($this->getAmountRaw(), $divisor, $this->scale));
     }
     
@@ -215,14 +233,19 @@ class Amount
     /**
      * Converts the currency to $newcurrency and returns a new Amount object.
      *
-     * @param string $newcurrency
-     * @param string $rate
+     * @param string           $newcurrency
+     * @param string|float|int $rate
+     * @param int|null         $scale
      *
      * @return self
      */
-    public function convertTo(string $newcurrency, string $rate): self
+    public function convertTo(string $newcurrency, $rate, ?int $scale = null): self
     {
-        return new self(bcmul($this->getAmountRaw(), $rate, 10), $newcurrency);
+        $rate = (string)$rate;
+        if ($scale === null) {
+            $scale = $this->getOptions()['scale'];
+        }
+        return new self(bcmul($this->getAmountRaw(), $rate, $scale), $newcurrency, ['scale' => $scale]);
     }
     
     
@@ -230,7 +253,7 @@ class Amount
     /**
      * Checks if supplied $operand can be used to execute the operation.
      *
-     * @param self $operand
+     * @param self   $operand
      * @param string $operation
      *
      * @return bool
@@ -292,7 +315,8 @@ class Amount
     /**
      * Creates an instance of \NumberFormatter for the current object.
      *
-     * @param number $fraction_digits
+     * @param bool     $withCcySymbol
+     * @param int|null $fraction_digits
      *
      * @return \NumberFormatter
      */
@@ -331,9 +355,9 @@ class Amount
      *
      * @param int $fraction_digits Number of digits shown (rounded)
      *
-     * @return float
+     * @return string
      */
-    public function amount($fraction_digits = 100): string
+    public function amount(int $fraction_digits = 100): string
     {
         $f = $this->getCurrencyFormatter(false, $fraction_digits);
         
@@ -393,9 +417,9 @@ class Amount
     /**
      * Returns the rounded value as new Amount object.
      *
-     * @return Amount
+     * @return self
      */
-    public function rounded(): Amount
+    public function rounded(): self
     {
         $f = $this->getCurrencyFormatter(false);
         
@@ -415,6 +439,7 @@ class Amount
      * self::rounded() and self::amount().
      *
      * @return Amount
+     * @throws \Exception
      */
     public function roundingDiff(): Amount
     {
@@ -424,7 +449,8 @@ class Amount
     
     
     /**
-     * Return the amount as string for output.
+     * Return the amount as string for output. Tries to print the amount in a locale- and currency-correct way.
+     * Can not be used for further calculation because of the currency symbol.
      *
      * @return string
      */
