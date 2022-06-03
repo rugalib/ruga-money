@@ -154,7 +154,7 @@ class AmountTest extends \Ruga\Money\Test\PHPUnit\AbstractTestSetUp
     public function testCanConvertCurrency(): void
     {
         $a = new \Ruga\Money\Amount(17.5, 'CHF', ['scale' => 8]);
-        $b = $a->convertTo('EUR', 1.06);
+        $b = $a->convertTo('EUR', 1/1.06);
         $this->assertSame('18.55000000', $b->getAmountRaw());
     }
     

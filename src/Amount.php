@@ -61,9 +61,9 @@ class Amount
     /**
      * Initialize the class and store the initial (immutable) amount.
      *
-     * @param string|int|float $amount
-     * @param string|null      $currency
-     * @param array|null       $options
+     * @param string|int|float|self $amount
+     * @param string|null           $currency
+     * @param array|null            $options
      */
     public function __construct($amount, string $currency = null, array $options = [])
     {
