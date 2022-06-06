@@ -434,8 +434,8 @@ class Amount
     
     
     /**
-     * Returns the rounding difference between the number returned by
-     * self::rounded() and self::amount().
+     * Returns the rounding difference.
+     * diff = self::rounded() - self::amount()
      *
      * @return Amount
      * @throws \Exception
