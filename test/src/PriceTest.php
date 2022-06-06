@@ -57,16 +57,15 @@ class PriceTest extends \Ruga\Money\Test\PHPUnit\AbstractTestSetUp
         echo '$p1=' . $p1;
         echo PHP_EOL;
         echo '$p1->excl()=' . $p1->excl();
+        $this->assertSame('CHF 2’219.61', "{$p1->excl()}");
         echo PHP_EOL;
         echo '$p1->incl()=' . $p1->incl();
+        $this->assertSame('CHF 2’580.06', "{$p1->incl()}");
         echo PHP_EOL;
         echo '$p1->explain():' . PHP_EOL . $p1->explain();
         echo PHP_EOL.PHP_EOL;
         echo '$p1->incl()->roundingDiff()->formatAmount()=' . $p1->incl()->roundingDiff()->formatAmount();
         echo PHP_EOL.PHP_EOL;
-    
-    
-    
     }
     
     

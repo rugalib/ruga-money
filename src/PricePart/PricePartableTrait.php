@@ -15,15 +15,8 @@ trait PricePartableTrait
 {
     public function getIncludes(): array
     {
-        return $this->getChainLinksAsArray(Direction::BACKWARD());
-        
-        $a = [];
-        $amount = $this->getAmount();
-        $incl = array_reverse($this->getChainLinksAsArray());
-        /** @var \Ruga\Money\PricePart\PricePartInterface $item */
-        foreach ($incl as $item) {
-            $a[] = $item;
-        }
+        $a = $this->getChainLinksAsArray(Direction::BACKWARD());
+        array_shift($a); // remove first (=price) element
         return $a;
     }
     
@@ -31,7 +24,9 @@ trait PricePartableTrait
     
     public function getExcludes(): array
     {
-        return $this->getChainLinksAsArray();
+        $a = $this->getChainLinksAsArray();
+        array_shift($a); // remove first (=price) element
+        return $a;
     }
     
     
