@@ -8,7 +8,7 @@ use Ruga\Money\Basket\DumpableInterface;
 use Ruga\Money\Amount;
 
 /**
- * Interface to a price part.
+ * An abstract price part.
  *
  * @see      Price
  * @author   Roland Rusch, easy-smart solution GmbH <roland.rusch@easy-smart.ch>
@@ -17,10 +17,10 @@ abstract class AbstractPricePart implements PricePartInterface, DumpableInterfac
 {
     use \Ruga\Std\Chain\LinkTrait;
     
-    private $name = null;
-    private $value = null;
-    private $operation = null;
-    private $pricedIn = false;
+    private ?string $name = null;
+    private ?string $value = null;
+    private ?string $operation = null;
+    private bool $pricedIn = false;
     
     private $outputTo = null;
     

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ruga\Money;
 
-
 use Ruga\Money\Exception\CurrencyMismatchException;
 use Ruga\Money\Exception\CurrencyNotSetException;
 
