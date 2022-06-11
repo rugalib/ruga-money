@@ -20,6 +20,10 @@ abstract class AbstractPricePart implements PricePartInterface, DumpableInterfac
     private ?string $name = null;
     private ?string $value = null;
     private ?string $operation = null;
+    /**
+     * @deprecated
+     * @var bool
+     */
     private bool $pricedIn = false;
     
     private $outputTo = null;
@@ -186,6 +190,7 @@ abstract class AbstractPricePart implements PricePartInterface, DumpableInterfac
     /**
      * {@inheritDoc}
      * @see \Ruga\Money\PricePart\PricePartInterface::isPricedIn()
+     * @deprecated
      */
     public function isPricedIn(): bool
     {

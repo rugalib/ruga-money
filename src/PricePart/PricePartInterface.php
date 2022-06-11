@@ -88,7 +88,7 @@ interface PricePartInterface extends \Ruga\Std\Chain\LinkInterface
      * Returns true if this price part is already priced in.
      *
      * @return bool
-     * @todo Provide more information about this method.
+     * @deprecated
      */
     public function isPricedIn(): bool;
     
