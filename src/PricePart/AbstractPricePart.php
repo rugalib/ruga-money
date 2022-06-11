@@ -69,12 +69,29 @@ abstract class AbstractPricePart implements PricePartInterface, DumpableInterfac
      */
     public function getCalculation(): string
     {
-        if (empty($this->outputTo)) {
-            return "{$this->getBaseAmount()} " . ($this->getOperation(
-                ) == PricePartOperation::ADD ? '+' : '-') . " {$this->getValue()} = {$this->getAmount()}";
-        } else {
-            return "{$this->getValue()} of {$this->getBaseAmount()} = {$this->getAbsoluteAmount()}";
+        if($this->isIncl()) {
+            if (empty($this->outputTo)) {
+                return "{$this->getAmount()} " .
+                    ($this->getOperation() == PricePartOperation::ADD ? '+' : '-') .
+                    " {$this->getValue()} = {$this->getBaseAmount()}";
+        
+            } else {
+                return "{$this->getValue()} of {$this->getAmount()} = {$this->getAbsoluteAmount()}";
+            }
         }
+        
+        if($this->isExcl()) {
+            if (empty($this->outputTo)) {
+                return "{$this->getBaseAmount()} " .
+                    ($this->getOperation() == PricePartOperation::ADD ? '+' : '-') .
+                    " {$this->getValue()} = {$this->getAmount()}";
+        
+            } else {
+                return "{$this->getValue()} of {$this->getBaseAmount()} = {$this->getAbsoluteAmount()}";
+            }
+        }
+        
+        return "==[ Price ]==> {$this->getAmount()}";
     }
     
     
@@ -173,6 +190,28 @@ abstract class AbstractPricePart implements PricePartInterface, DumpableInterfac
     public function isPricedIn(): bool
     {
         return $this->pricedIn;
+    }
+    
+    
+    
+    /**
+     * {@inheritDoc}
+     * @return bool
+     */
+    public function isIncl(): bool
+    {
+        return $this->linkPos() < 0;
+    }
+    
+    
+    
+    /**
+     * {@inheritDoc}
+     * @return bool
+     */
+    public function isExcl(): bool
+    {
+        return $this->linkPos() > 0;
     }
     
     

@@ -8,11 +8,16 @@ use Ruga\Std\Chain\Direction;
 
 /**
  * Provides functions for object that can have price parts.
+ * @see PricePartableInterface
  *
  * @author Roland Rusch, easy-smart solution GmbH <roland.rusch@easy-smart.ch>
  */
 trait PricePartableTrait
 {
+    /**
+     * @return PricePartInterface[]
+     * @throws \ReflectionException
+     */
     public function getIncludes(): array
     {
         $a = $this->getChainLinksAsArray(Direction::BACKWARD());
@@ -22,6 +27,10 @@ trait PricePartableTrait
     
     
     
+    /**
+     * @return PricePartInterface[]
+     * @throws \ReflectionException
+     */
     public function getExcludes(): array
     {
         $a = $this->getChainLinksAsArray();

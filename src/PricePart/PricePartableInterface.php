@@ -48,7 +48,20 @@ interface PricePartableInterface
     
     
     
+    /**
+     * Return all the price parts included in the price.
+     *
+     * @return PricePartInterface[]
+     */
     public function getIncludes(): array;
-// 	public function getExcludes() : array;
+    
+    
+    
+    /**
+     * Return all the price parts NOT included in the price.
+     *
+     * @return PricePartInterface[]
+     */
+    public function getExcludes(): array;
 
 }

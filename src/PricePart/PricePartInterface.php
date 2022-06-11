@@ -9,12 +9,14 @@ namespace Ruga\Money\PricePart;
  * Interface to a price part.
  *
  * @see      Price
+ * @see      AbstractPricePart
  * @author   Roland Rusch, easy-smart solution GmbH <roland.rusch@easy-smart.ch>
  */
 interface PricePartInterface extends \Ruga\Std\Chain\LinkInterface
 {
     /**
-     * Return the base amount, before this price part is applied.
+     * Return the base amount, before this price part is applied. For included price parts, this is the amount
+     * before the reverse calculation is applied.
      *
      * @return \Ruga\Money\Amount
      */
@@ -23,11 +25,7 @@ interface PricePartInterface extends \Ruga\Std\Chain\LinkInterface
     
     
     /**
-     * Return the absolute amount for this price part. Calculated from given $amount.
-     * Calculate the other way (up > down) if $excl is true.
-     *
-     * @param \Ruga\Money\Amount $amount
-     * @param bool               $excl
+     * Return the absolute amount for this price part.
      *
      * @return \Ruga\Money\Amount
      */
@@ -36,7 +34,8 @@ interface PricePartInterface extends \Ruga\Std\Chain\LinkInterface
     
     
     /**
-     * Returns the new amount after this price part is applied.
+     * Returns the amount after this price part is applied. For included price parts, this is the amount after
+     * applying the reversed calculation.
      *
      * @return \Ruga\Money\Amount
      * @todo Move to other interface
@@ -76,7 +75,8 @@ interface PricePartInterface extends \Ruga\Std\Chain\LinkInterface
     
     
     /**
-     * Return the calculation.
+     * Return the calculation as string. This is used for explanation of the price part and how the price is
+     * created.
      *
      * @return string
      */
@@ -88,13 +88,32 @@ interface PricePartInterface extends \Ruga\Std\Chain\LinkInterface
      * Returns true if this price part is already priced in.
      *
      * @return bool
+     * @todo Provide more information about this method.
      */
     public function isPricedIn(): bool;
     
     
     
     /**
-     * Defines, where the resulting absolute amount should be placed.
+     * Returns true, if the price part is an included price part.
+     *
+     * @return bool
+     */
+    public function isIncl(): bool;
+    
+    
+    
+    /**
+     * Returns true, if the price part is an excluded price part.
+     *
+     * @return bool
+     */
+    public function isExcl(): bool;
+    
+    
+    /**
+     * Defines, where the resulting absolute amount should be placed. This allows you to put VAT amounts in a seperated
+     * position in your basket.
      *
      * @param PricePartableInterface $output
      *
