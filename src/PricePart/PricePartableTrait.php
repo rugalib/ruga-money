@@ -132,11 +132,12 @@ trait PricePartableTrait
         $incl = array_reverse($this->getIncludes());
         /** @var PricePartInterface $pricepart */
         foreach ($incl as $pricepart) {
-            $str .= "name={$pricepart->getName()} | operation={$pricepart->getOperation()} | absoluteAmount: {$pricepart->getAbsoluteAmount($amount)} | ";
-            $str .= "{$amount} " . ($pricepart->getOperation(
-                ) == PricePartOperation::ADD ? '+' : '-') . " {$pricepart->getAbsoluteAmount($amount)} = ";
+            $str .= "name={$pricepart->getName()} | operation={$pricepart->getOperation()} | absoluteAmount: {$pricepart->getAbsoluteAmount($amount)}";
+            $str .= " | {$pricepart->getCalculation()}";
+            //$str .= " | {$amount} " . ($pricepart->getOperation(
+            //    ) == PricePartOperation::ADD ? '+' : '-') . " {$pricepart->getAbsoluteAmount($amount)} = ";
             $amount = $pricepart->getNewAmount($amount);
-            $str .= "{$amount}";
+            //$str .= "{$amount}";
             $str .= PHP_EOL;
         }
         
@@ -144,11 +145,12 @@ trait PricePartableTrait
         
         $excl = $this->getExcludes();
         foreach ($excl as $pricepart) {
-            $str .= "name={$pricepart->getName()} | operation={$pricepart->getOperation()} | absoluteAmount: {$pricepart->getAbsoluteAmount($amount)} | ";
-            $str .= "{$amount} " . ($pricepart->getOperation(
-                ) == PricePartOperation::ADD ? '+' : '-') . " {$pricepart->getAbsoluteAmount($amount)} = ";
+            $str .= "name={$pricepart->getName()} | operation={$pricepart->getOperation()} | absoluteAmount: {$pricepart->getAbsoluteAmount($amount)}";
+            $str .= " | {$pricepart->getCalculation()}";
+            //$str .= " | {$amount} " . ($pricepart->getOperation(
+            //    ) == PricePartOperation::ADD ? '+' : '-') . " {$pricepart->getAbsoluteAmount($amount)} = ";
             $amount = $pricepart->getNewAmount($amount);
-            $str .= "{$amount}";
+            //$str .= "{$amount}";
             $str .= PHP_EOL;
         }
         
