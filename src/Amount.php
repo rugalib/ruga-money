@@ -368,9 +368,9 @@ class Amount
         $f->setAttribute(\NumberFormatter::MIN_FRACTION_DIGITS, $this->scale);
         
         // Don't group
-        $f->setAttribute(\NumberFormatter::GROUPING_USED, false);
+        $f->setAttribute(\NumberFormatter::GROUPING_USED, 0);
         
-        return $f->format($this->getAmountRaw());
+        return $f->format((float)$this->getAmountRaw());
     }
     
     
@@ -390,7 +390,7 @@ class Amount
         // Show the full precision we have, instead of the currency default
         $f->setAttribute(\NumberFormatter::MIN_FRACTION_DIGITS, $this->scale);
         
-        return $f->format($this->getAmountRaw());
+        return $f->format((float)$this->getAmountRaw());
     }
     
     
@@ -427,7 +427,7 @@ class Amount
         $f = $this->getCurrencyFormatter(false);
         
         // Don't group
-        $f->setAttribute(\NumberFormatter::GROUPING_USED, false);
+        $f->setAttribute(\NumberFormatter::GROUPING_USED, 0);
         
         return $this->clone(
             $f->formatCurrency((float)$this->getAmountRaw(), $this->getCurrency()),
